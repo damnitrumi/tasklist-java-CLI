@@ -2,12 +2,15 @@ package com.guilhermesoares.todolist.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +23,9 @@ public class User implements Serializable{
 	private Long id;
 	private String name;
 	private Instant registerDate;
+	
+	@OneToMany(mappedBy = "taskOwner")
+	private List<Task> tasks = new ArrayList<>();
 	
 	public User(){
 	}
@@ -47,6 +53,14 @@ public class User implements Serializable{
 	}
 	public void setRegisterDate(Instant registerDate) {
 		this.registerDate = registerDate;
+	}
+	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 
 	@Override
