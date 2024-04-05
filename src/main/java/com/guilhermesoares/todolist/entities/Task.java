@@ -23,6 +23,7 @@ public class Task implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String description;
 	private Instant createdAt;
 	private Instant finishedAt;
@@ -37,12 +38,11 @@ public class Task implements Serializable{
 	public Task(){
 	}
 
-	public Task(Long id, String description, Instant createdAt, Instant finishedAt, TaskPriority taskPriority,
+	public Task(Long id, String description, TaskPriority taskPriority,
 			TaskStatus taskStatus, String notes, User taskOwner) {
 		this.id = id;
 		this.description = description;
 		this.createdAt = Instant.now();
-		this.finishedAt = finishedAt;
 		setTaskPriority(taskPriority);
 		setTaskStatus(taskStatus);
 		this.notes = notes;
@@ -132,6 +132,13 @@ public class Task implements Serializable{
 			return false;
 		Task other = (Task) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", description=" + description + ", createdAt=" + createdAt + ", finishedAt="
+				+ finishedAt + ", taskPriority=" + taskPriority + ", taskStatus=" + taskStatus + ", notes=" + notes
+				+ ", taskOwner=" + taskOwner.getName() + "]";
 	}
 	
 }
