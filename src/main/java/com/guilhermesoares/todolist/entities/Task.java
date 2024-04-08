@@ -28,7 +28,7 @@ public class Task implements Serializable{
 	private Instant createdAt;
 	private Instant finishedAt;
 	private Integer taskPriority;
-	private Integer taskStatus;
+	private Integer taskStatus = TaskStatus.PENDING.getCode();
 	private String notes;
 	
 	@ManyToOne
@@ -38,13 +38,11 @@ public class Task implements Serializable{
 	public Task(){
 	}
 
-	public Task(Long id, String description, TaskPriority taskPriority,
-			TaskStatus taskStatus, String notes, User taskOwner) {
+	public Task(Long id, String description, TaskPriority taskPriority, String notes, User taskOwner) {
 		this.id = id;
 		this.description = description;
 		this.createdAt = Instant.now();
 		setTaskPriority(taskPriority);
-		setTaskStatus(taskStatus);
 		this.notes = notes;
 		this.taskOwner = taskOwner;
 	}
@@ -139,6 +137,10 @@ public class Task implements Serializable{
 		return "Task [id=" + id + ", description=" + description + ", createdAt=" + createdAt + ", finishedAt="
 				+ finishedAt + ", taskPriority=" + taskPriority + ", taskStatus=" + taskStatus + ", notes=" + notes
 				+ ", taskOwner=" + taskOwner.getName() + "]";
+	}
+	
+	public void finishTask() {
+		setFinishedAt(Instant.now());
 	}
 	
 }
