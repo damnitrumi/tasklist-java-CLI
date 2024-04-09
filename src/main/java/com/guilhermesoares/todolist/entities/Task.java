@@ -141,6 +141,7 @@ public class Task implements Serializable{
 	
 	public void finishTask() {
 		setFinishedAt(Instant.now());
+		setTaskStatus(TaskStatus.COMPLETED);
 	}
 	
 }

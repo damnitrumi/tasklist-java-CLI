@@ -23,4 +23,11 @@ public enum TaskStatus {
 		}
 		throw new IllegalArgumentException("Invalid TaskStatus code");
 	}
+	
+	public static String formatString(String status) {
+		if(status.contains(" ")) {
+			return status.replace(" ", "_");
+		}
+		return status;
+	}
 }

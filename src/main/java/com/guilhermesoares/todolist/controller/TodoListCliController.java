@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import com.guilhermesoares.todolist.entities.Task;
 import com.guilhermesoares.todolist.entities.User;
 import com.guilhermesoares.todolist.entities.enums.TaskPriority;
+import com.guilhermesoares.todolist.entities.enums.TaskStatus;
 import com.guilhermesoares.todolist.services.TaskService;
 import com.guilhermesoares.todolist.services.UserService;
 
@@ -29,7 +30,9 @@ public class TodoListCliController {
 			Long id;
 			String notes = null;
 			String priority;
+			String status;
 			TaskPriority taskPriority;
+			TaskStatus taskStatus;
 			Boolean running = true;
 
 			while (running) {
@@ -37,6 +40,8 @@ public class TodoListCliController {
 				System.out.println("1: Add new User");
 				System.out.println("2: Add new Task");
 				System.out.println("3: Change Task Priority");
+				System.out.println("4: Change Task Status [Pending or In Progress]");
+				System.out.println("5: Finish Task");
 
 				String option = sc.next();
 
@@ -74,25 +79,58 @@ public class TodoListCliController {
 					task = new Task(null, desc, taskPriority, notes, user);
 
 					taskService.insert(task);
-					
-					user.getTasks().add(task);
 					break;
 					
-				case "3":
-					System.out.println("First of all i need to know what is the id of your User");
-					id = sc.nextLong();
-					user = userService.findById(id);
-					
-					System.out.println("I need to know the ID of the task you to change priority");
+				case "3":				
+					System.out.println("I need to know the ID of the task you want to change priority");
 					id = sc.nextLong();
 					task = taskService.findById(id);
 					
 					System.out.println("What is the priority of your task? [Choose between: Low, Medium, High]");
 					sc.nextLine();
 					priority = sc.nextLine().toUpperCase();
-					taskPriority = TaskPriority.valueOf(priority);
+					try {
+						taskPriority = TaskPriority.valueOf(priority);
+					}catch(IllegalArgumentException e) {
+						System.out.println("Option not allowed, please choose between 'Low', 'Medium' and 'High'");
+						continue;
+					}
+					
 					task.setTaskPriority(taskPriority);
 					taskService.update(task);
+					break;
+					
+				case "4":
+					System.out.println("I need to know the ID of the task you want to change status");
+					id = sc.nextLong();
+					task = taskService.findById(id);
+					System.out.println("What is the status you want to set? [Pending or In Progress]");
+					sc.nextLine();
+					status = sc.nextLine();
+					status = TaskStatus.formatString(status).toUpperCase();
+					try {
+						taskStatus = TaskStatus.valueOf(status);
+					}catch(IllegalArgumentException e) {
+						System.out.println("Option not allowed, please choose between 'Pending' and 'In Progress'");
+						continue;
+					}
+					task.setTaskStatus(taskStatus);				
+					taskService.update(task);
+					
+					break;
+				
+				case "5":
+					System.out.println("First of all i need to know what is the id of your User");
+					id = sc.nextLong();
+					user = userService.findById(id);
+					
+					System.out.println("I need to know the ID of the task you want to finish");
+					id = sc.nextLong();
+					task = taskService.findById(id);
+					task.finishTask();
+					
+					taskService.update(task);
+					
 					break;
 				default:
 					System.out.println("Selected option does not exist!");
