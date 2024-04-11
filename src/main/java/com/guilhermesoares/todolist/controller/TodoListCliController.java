@@ -39,7 +39,7 @@ public class TodoListCliController {
 				System.out.println("Choose the desired option");
 				System.out.println("1: Add new User");
 				System.out.println("2: Add new Task");
-				System.out.println("3: Change Task Priority");
+				System.out.println("3: Change Task Priority [Low, Medium o High]");
 				System.out.println("4: Change Task Status [Pending or In Progress]");
 				System.out.println("5: Finish Task");
 
@@ -81,41 +81,58 @@ public class TodoListCliController {
 					taskService.insert(task);
 					break;
 					
-				case "3":				
-					System.out.println("I need to know the ID of the task you want to change priority");
-					id = sc.nextLong();
-					task = taskService.findById(id);
-					
-					System.out.println("What is the priority of your task? [Choose between: Low, Medium, High]");
-					sc.nextLine();
-					priority = sc.nextLine().toUpperCase();
-					try {
-						taskPriority = TaskPriority.valueOf(priority);
-					}catch(IllegalArgumentException e) {
-						System.out.println("Option not allowed, please choose between 'Low', 'Medium' and 'High'");
-						continue;
+				case "3":	
+					while(true) {					
+						System.out.println("I need to know the ID of the task you want to change priority");
+						id = sc.nextLong();
+						task = taskService.findById(id);
+						
+						System.out.println("What is the priority of your task? [Choose between: Low, Medium, High]");
+						sc.nextLine();
+						priority = sc.nextLine().toUpperCase();
+						try {
+							taskPriority = TaskPriority.valueOf(priority);
+							task.setTaskPriority(taskPriority);
+							taskService.update(task);
+							break;
+						}catch(IllegalArgumentException e) {
+							System.out.println("Option not allowed, please choose between 'Low', 'Medium' and 'High'");
+							System.out.println("If you want to try again type '1', if you want to return to main menu type '2'");
+							option = sc.next();
+							if(option.equals("2")) {
+								break;
+							}
+							continue;
+						}
 					}
-					
-					task.setTaskPriority(taskPriority);
-					taskService.update(task);
+										
 					break;
 					
 				case "4":
-					System.out.println("I need to know the ID of the task you want to change status");
-					id = sc.nextLong();
-					task = taskService.findById(id);
-					System.out.println("What is the status you want to set? [Pending or In Progress]");
-					sc.nextLine();
-					status = sc.nextLine();
-					status = TaskStatus.formatString(status).toUpperCase();
-					try {
-						taskStatus = TaskStatus.valueOf(status);
-					}catch(IllegalArgumentException e) {
-						System.out.println("Option not allowed, please choose between 'Pending' and 'In Progress'");
-						continue;
-					}
-					task.setTaskStatus(taskStatus);				
-					taskService.update(task);
+					while(true) {
+						System.out.println("I need to know the ID of the task you want to change status");
+						id = sc.nextLong();
+						task = taskService.findById(id);
+						
+						System.out.println("What is the status you want to set? [Pending or In Progress]");
+						sc.nextLine();
+						status = sc.nextLine();
+						status = TaskStatus.formatString(status).toUpperCase();
+						try {
+							taskStatus = TaskStatus.valueOf(status);
+							task.setTaskStatus(taskStatus);	
+							taskService.update(task);
+							break;
+						}catch(IllegalArgumentException e) {
+							System.out.println("Option not allowed, please choose between 'Pending' and 'In Progress'");
+							System.out.println("If you want to try again type '1', if you want to return to main menu type '2'");
+							option = sc.next();
+							if(option.equals("2")) {
+								break;
+							}
+							continue;
+						}
+					}			
 					
 					break;
 				
