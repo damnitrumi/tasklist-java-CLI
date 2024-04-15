@@ -136,7 +136,7 @@ public class Task implements Serializable{
 	public String toString() {
 		return "Task [id=" + id + ", description=" + description + ", createdAt=" + createdAt + ", finishedAt="
 				+ finishedAt + ", taskPriority=" + taskPriority + ", taskStatus=" + taskStatus + ", notes=" + notes
-				+ ", taskOwner=" + taskOwner.getName() + "]";
+				+ ", taskOwner=" + taskOwner.getName() + "Owner Id=" + taskOwner.getId() + "]\n";
 	}
 	
 	public void finishTask() {

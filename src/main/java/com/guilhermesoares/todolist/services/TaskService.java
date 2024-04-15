@@ -1,5 +1,6 @@
 package com.guilhermesoares.todolist.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class TaskService {
 	public Task findById(Long id) {
 		Optional<Task> task = repository.findById(id);
 		return task.orElseThrow(() -> new ResourceNotFoundException(id));
+	}
+	
+	public List<Task> findAllTasksById(Long id){
+		return repository.findAllByTaskOwnerId(id);
 	}
 	
 	public void insert(Task task) {

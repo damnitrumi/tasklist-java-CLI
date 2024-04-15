@@ -2,6 +2,7 @@ package com.guilhermesoares.todolist.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,6 +79,11 @@ public class User implements Serializable{
 			return false;
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", registerDate=" + registerDate + "]\n";
 	}
 	
 }
